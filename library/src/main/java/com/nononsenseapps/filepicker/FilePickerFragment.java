@@ -26,7 +26,7 @@ import java.io.File;
  */
 public class FilePickerFragment extends AbstractFilePickerFragment<File> {
 
-    protected static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    protected static final int PERMISSIONS_REQUEST_ACCESS_EXTERNAL_STORAGE = 1;
     protected boolean showHiddenItems = false;
     private File mRequestedPath = null;
 
@@ -59,7 +59,7 @@ public class FilePickerFragment extends AbstractFilePickerFragment<File> {
     protected boolean hasPermission(@NonNull File path) {
         return PackageManager.PERMISSION_GRANTED ==
                 ContextCompat.checkSelfPermission(getContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                                                  getPermissionToAccessStorage());
     }
 
     /**
@@ -74,8 +74,8 @@ public class FilePickerFragment extends AbstractFilePickerFragment<File> {
 //        }
 
         mRequestedPath = path;
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        requestPermissions(new String[]{getPermissionToAccessStorage()},
+                           PERMISSIONS_REQUEST_ACCESS_EXTERNAL_STORAGE);
     }
 
     /**
@@ -96,14 +96,14 @@ public class FilePickerFragment extends AbstractFilePickerFragment<File> {
             if (mListener != null) {
                 mListener.onCancelled();
             }
-        } else { // if (requestCode == PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
+        } else { // if (requestCode == PERMISSIONS_REQUEST_ACCESS_EXTERNAL_STORAGE) {
             if (PackageManager.PERMISSION_GRANTED == grantResults[0]) {
                 // Do refresh
                 if (mRequestedPath != null) {
                     refresh(mRequestedPath);
                 }
             } else {
-                Toast.makeText(getContext(), R.string.nnf_permission_external_write_denied,
+                Toast.makeText(getContext(), R.string.nnf_permission_external_storage_denied,
                         Toast.LENGTH_SHORT).show();
                 // Treat this as a cancel press
                 if (mListener != null) {
@@ -347,5 +347,15 @@ public class FilePickerFragment extends AbstractFilePickerFragment<File> {
         } else {
             return lhs.getName().compareToIgnoreCase(rhs.getName());
         }
+    }
+
+
+    /**
+     * @return read or write permissions depending on current mode
+     */
+    protected String getPermissionToAccessStorage() {
+        boolean needsPermissionsToWrite = mode == MODE_NEW_FILE || allowCreateDir;
+        return needsPermissionsToWrite ?
+            Manifest.permission.WRITE_EXTERNAL_STORAGE : Manifest.permission.READ_EXTERNAL_STORAGE;
     }
 }
