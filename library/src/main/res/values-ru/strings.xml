@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nnf_new_folder">Новая папка</string>
+    <string name="nnf_create_folder_error">Не удалось создать новую папку</string>
+    <string name="nnf_name">Название</string>
+    <string name="nnf_select_something_first">Необходимо сперва что-нибудь выбрать</string>
+    <string name="nnf_need_valid_filename">Выберите или введите имя файла</string>
+    <string name="nnf_permission_external_storage_denied">Права на доступ к файловой системе были заблокированы</string>
+    <string name="nnf_filename">Имя файла</string>
+</resources>
