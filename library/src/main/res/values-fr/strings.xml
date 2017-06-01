@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="nnf_create_folder_error">Impossible de créer le dossier</string>
+	<string name="nnf_filename">Nom du fichier</string>
+	<string name="nnf_name">Nom</string>
+	<string name="nnf_need_valid_filename">Merci d\'entrer ou sélectionner un nom de fichier valide</string>
+	<string name="nnf_new_folder">Nouveau dossier</string>
+	<string name="nnf_permission_external_storage_denied">Permission d\'accéder aux fichiers systèmes refusée</string>
+	<string name="nnf_select_something_first">Merci de sélectionner quelque chose en premier</string>
+</resources>
