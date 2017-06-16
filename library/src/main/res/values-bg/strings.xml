@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="nnf_create_folder_error">Грешка при създаване на папка</string>
+	<string name="nnf_filename">Име на файл</string>
+	<string name="nnf_name">Име</string>
+	<string name="nnf_need_valid_filename">Въведете или изберете валиден файл</string>
+	<string name="nnf_new_folder">Нова папка</string>
+	<string name="nnf_permission_external_storage_denied">Отказан достъп до файловата система</string>
+	<string name="nnf_select_something_first">Изберете нещо</string>
+</resources>
