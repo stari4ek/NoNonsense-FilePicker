@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="nnf_create_folder_error">Aanmaken map mislukt</string>
+	<string name="nnf_filename">Bestandsnaam</string>
+	<string name="nnf_name">Naam</string>
+	<string name="nnf_need_valid_filename">Selecteer of voer een geldige bestandsnaam in</string>
+	<string name="nnf_new_folder">Nieuwe map</string>
+	<string name="nnf_permission_external_storage_denied">Toestemming voor toegang tot bestandsysteem geweigerd</string>
+	<string name="nnf_select_something_first">Maak eerst een selectie</string>
+</resources>
