@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="nnf_create_folder_error">Įvyko klaida kuriant aplanką</string>
+	<string name="nnf_filename">Failo pavadinimas</string>
+	<string name="nnf_name">Vardas</string>
+	<string name="nnf_need_valid_filename">Įrašykite ar pasirinkite teisingą failą</string>
+	<string name="nnf_new_folder">Naujas aplankas</string>
+	<string name="nnf_permission_external_storage_denied">Leidimas prie failų sistemos buvo atmestas</string>
+	<string name="nnf_select_something_first">Pasirinkite pirmiausia ką nors</string>
+</resources>
