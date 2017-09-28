@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="nnf_create_folder_error">Neizdevās izveidot jaunu mapi</string>
+	<string name="nnf_filename">Faila nosaukums</string>
+	<string name="nnf_name">Nosaukums</string>
+	<string name="nnf_need_valid_filename">Ievadiet vai atlasiet derīgu faila nosaukumu</string>
+	<string name="nnf_new_folder">Jauna mape</string>
+	<string name="nnf_permission_external_storage_denied">Piekļuve failu sistēmai ir noraidīta</string>
+	<string name="nnf_select_something_first">Lūdzu, vispirms izvēlieties kaut ko</string>
+</resources>
