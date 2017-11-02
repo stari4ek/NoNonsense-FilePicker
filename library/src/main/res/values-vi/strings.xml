@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="nnf_create_folder_error">Tạo thư mục thất bại</string>
+	<string name="nnf_filename">Tên tập tin</string>
+	<string name="nnf_name">Tên</string>
+	<string name="nnf_need_valid_filename">Nhập hoặc chọn một tên tập tin</string>
+	<string name="nnf_new_folder">Thư mục mới</string>
+	<string name="nnf_permission_external_storage_denied">Quyền truy cập file bị từ chối</string>
+	<string name="nnf_select_something_first">Xin hãy chọn một thứ gì đó</string>
+</resources>
