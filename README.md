@@ -1,3 +1,11 @@
+## Note: avoid using as SD-card file picker on Kitkat+
+
+In Kitkat or above, use Android's built-in file-picker instead. Google has restricted the ability of external libraries like this from creating directories on external SD-cards in Kitkat and above which will manifest itself as a crash.
+
+If you need to support pre-Kitkat devices see [#158](https://github.com/spacecowboy/NoNonsense-FilePicker/issues/158#issuecomment-353896387) for the recommendation approach.
+
+This does not impact the library's utility for non-SD-card locations, nor does it impact you if you don't want to allow a user to create directories.
+
 # NoNonsense-FilePicker
 
 <p>
@@ -7,23 +15,19 @@
 </p>
 
 <p>
-<img src="https://raw.githubusercontent.com/spacecowboy/NoNonsense-FilePicker/master/screenshots/Nexus6-picker-dark.png"
-width="25%"
-</img>
+<img src="https://github.com/spacecowboy/NoNonsense-FilePicker/blob/master/screenshots/Nexus6-picker-dark.png?raw=true"
+width="25%"/>
 
-<img src="https://raw.githubusercontent.com/spacecowboy/NoNonsense-FilePicker/master/screenshots/Nexus10-picker-dark.png"
-width="50%"
-</img>
+<img src="https://github.com/spacecowboy/NoNonsense-FilePicker/blob/master/screenshots/Nexus10-picker-dark.png?raw=true"
+width="50%"/>
 </p>
 
 <p>
-<img src="https://raw.githubusercontent.com/spacecowboy/NoNonsense-FilePicker/master/screenshots/Nexus6-picker-light.png"
-width="25%"
-</img>
+<img src="https://github.com/spacecowboy/NoNonsense-FilePicker/blob/master/screenshots/Nexus6-picker-light.png?raw=true"
+width="25%"/>
 
-<img src="https://raw.githubusercontent.com/spacecowboy/NoNonsense-FilePicker/master/screenshots/Nexus10-picker-light.png"
-width="50%"
-</img>
+<img src="https://github.com/spacecowboy/NoNonsense-FilePicker/blob/master/screenshots/Nexus10-picker-light.png?raw=true"
+width="50%"/>
 </p>
 
 -   Extendable for sources other than SD-card (Dropbox, FTP, Drive, etc)
@@ -66,7 +70,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.nononsenseapps:filepicker:4.0.0'
+    compile 'com.nononsenseapps:filepicker:4.1.0'
 }
 ```
 
@@ -81,9 +85,11 @@ dependencies {
 
 ### Include a provider element
 
-Due to recent changes in Android 7.0 Nougat, bare File URIs can no
+Due to changes in Android 6.0 Marshmallow, bare File URIs can no
 longer be returned in a safe way. This change requires you to add an
 entry to your manifest to use the included FilePickerFragment:
+
+**NOTE: the authority of this provider is hard-coded in the bundled FilePickerFragment. If you have an existing content provider in your app with the same authority you will have a conflict. You'll either have to rename your existing authority or extend FilePickerFragment and override which authority is used.**
 
 ```xml
     <provider
@@ -169,33 +175,16 @@ you like..
 
 ### Handling the result
 
-If you have a minimum requirement of Jelly Bean (API 16) and above,
-you can skip the second method.
+You can use the included utility method to parse the activity result:
 
 ```java
 protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
     if (requestCode == FILE_CODE && resultCode == Activity.RESULT_OK) {
-        if (!data.getBooleanExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)) {
-            // The URI will now be something like content://PACKAGE-NAME/root/path/to/file
-            Uri uri = intent.getData();
-            // A utility method is provided to transform the URI to a File object
-            File file = com.nononsenseapps.filepicker.Utils.getFileForUri(uri);
-            // If you want a URI which matches the old return value, you can do
-            Uri fileUri = Uri.fromFile(file);
+        // Use the provided utility method to parse the result
+        List<Uri> files = Utils.getSelectedFilesFromResult(intent);
+        for (Uri uri: files) {
+            File file = Utils.getFileForUri(uri);
             // Do something with the result...
-        } else {
-            // Handling multiple results is one extra step
-            ArrayList<String> paths = data.getStringArrayListExtra(FilePickerActivity.EXTRA_PATHS);
-            if (paths != null) {
-                for (String path: paths) {
-                    Uri uri = Uri.parse(path);
-                    // Do something with the URI
-                    File file = com.nononsenseapps.filepicker.Utils.getFileForUri(uri);
-                    // If you want a URI which matches the old return value, you can do
-                    Uri fileUri = Uri.fromFile(file);
-                    // Do something with the result...
-                }
-            }
         }
     }
 }
