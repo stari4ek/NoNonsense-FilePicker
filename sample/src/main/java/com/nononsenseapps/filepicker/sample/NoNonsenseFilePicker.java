@@ -8,27 +8,21 @@ package com.nononsenseapps.filepicker.sample;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ClipData;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.RadioGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.nononsenseapps.filepicker.AbstractFilePickerActivity;
 import com.nononsenseapps.filepicker.AbstractFilePickerFragment;
 import com.nononsenseapps.filepicker.FilePickerActivity;
+import com.nononsenseapps.filepicker.Utils;
+import com.nononsenseapps.filepicker.sample.databinding.ActivityNoNonsenseFilePickerBinding;
 import com.nononsenseapps.filepicker.sample.dropbox.DropboxFilePickerActivity;
 import com.nononsenseapps.filepicker.sample.dropbox.DropboxFilePickerActivity2;
-import com.nononsenseapps.filepicker.sample.dropbox.DropboxSyncHelper;
 import com.nononsenseapps.filepicker.sample.fastscroller.FastScrollerFilePickerActivity;
 import com.nononsenseapps.filepicker.sample.fastscroller.FastScrollerFilePickerActivity2;
 import com.nononsenseapps.filepicker.sample.ftp.FtpPickerActivity;
@@ -38,47 +32,29 @@ import com.nononsenseapps.filepicker.sample.multimedia.MultimediaPickerActivity2
 import com.nononsenseapps.filepicker.sample.root.SUPickerActivity;
 import com.nononsenseapps.filepicker.sample.root.SUPickerActivity2;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class NoNonsenseFilePicker extends Activity {
 
+    // How to handle multiple return data
+    public static boolean useClipData = true;
+
     static final int CODE_SD = 0;
     static final int CODE_DB = 1;
     static final int CODE_FTP = 2;
-    TextView textView;
-    DropboxAPI<AndroidAuthSession> mDBApi = null;
-    CheckBox checkAllowCreateDir;
-    CheckBox checkAllowMultiple;
-    CheckBox checkSingleClick;
-    CheckBox checkLightTheme;
-    RadioGroup radioGroup;
-    CheckBox checkAllowExistingFile;
+    ActivityNoNonsenseFilePickerBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_no_nonsense_file_picker);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_no_nonsense_file_picker);
 
-        checkAllowCreateDir =
-                (CheckBox) findViewById(R.id.checkAllowCreateDir);
-        checkAllowMultiple =
-                (CheckBox) findViewById(R.id.checkAllowMultiple);
-        checkAllowExistingFile =
-                (CheckBox) findViewById(R.id.checkAllowExistingFile);
-        checkSingleClick =
-                (CheckBox) findViewById(R.id.checkSingleClick);
-        checkLightTheme =
-                (CheckBox) findViewById(R.id.checkLightTheme);
-        radioGroup =
-                (RadioGroup) findViewById(R.id.radioGroup);
-        textView = (TextView) findViewById(R.id.text);
-
-        findViewById(R.id.button_sd)
+        binding.buttonSd
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        if (checkLightTheme.isChecked()) {
+                        if (binding.checkLightTheme.isChecked()) {
                             startActivity(CODE_SD, FilePickerActivity2.class);
                         } else {
                             startActivity(CODE_SD, FilePickerActivity.class);
@@ -86,11 +62,11 @@ public class NoNonsenseFilePicker extends Activity {
                     }
                 });
 
-        findViewById(R.id.button_image)
+        binding.buttonImage
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        if (checkLightTheme.isChecked()) {
+                        if (binding.checkLightTheme.isChecked()) {
                             startActivity(CODE_SD, MultimediaPickerActivity2.class);
                         } else {
                             startActivity(CODE_SD, MultimediaPickerActivity.class);
@@ -98,11 +74,11 @@ public class NoNonsenseFilePicker extends Activity {
                     }
                 });
 
-        findViewById(R.id.button_ftp)
+        binding.buttonFtp
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-                        if (checkLightTheme.isChecked()) {
+                        if (binding.checkLightTheme.isChecked()) {
                             startActivity(CODE_FTP, FtpPickerActivity2.class);
                         } else {
                             startActivity(CODE_FTP, FtpPickerActivity.class);
@@ -110,53 +86,41 @@ public class NoNonsenseFilePicker extends Activity {
                     }
                 });
 
-        findViewById(R.id.button_dropbox)
+        binding.buttonDropbox
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(final View v) {
-
-                        // First we must authorize the user
-                        if (mDBApi == null) {
-                            mDBApi = DropboxSyncHelper
-                                    .getDBApi(NoNonsenseFilePicker.this);
-                        }
-
-                        // If not authorized, then ask user for login/permission
-                        if (!mDBApi.getSession().isLinked()) {
-                            mDBApi.getSession().startOAuth2Authentication(
-                                    NoNonsenseFilePicker.this);
-                        } else {  // User is authorized, open file picker
-                            Intent i;
-                            if (checkLightTheme.isChecked()) {
-                                startActivity(CODE_DB, DropboxFilePickerActivity2.class);
-                            } else {
-                                startActivity(CODE_DB, DropboxFilePickerActivity.class);
-                            }
+                        if (binding.checkLightTheme.isChecked()) {
+                            startActivity(CODE_DB, DropboxFilePickerActivity2.class);
+                        } else {
+                            startActivity(CODE_DB, DropboxFilePickerActivity.class);
                         }
                     }
                 });
 
-        findViewById(R.id.button_root).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkLightTheme.isChecked()) {
-                    startActivity(CODE_SD, SUPickerActivity.class);
-                } else {
-                    startActivity(CODE_SD, SUPickerActivity2.class);
-                }
-            }
-        });
+        binding.buttonRoot
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (binding.checkLightTheme.isChecked()) {
+                            startActivity(CODE_SD, SUPickerActivity.class);
+                        } else {
+                            startActivity(CODE_SD, SUPickerActivity2.class);
+                        }
+                    }
+                });
 
-        findViewById(R.id.button_fastscroll).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (checkLightTheme.isChecked()) {
-                    startActivity(CODE_SD, FastScrollerFilePickerActivity.class);
-                } else {
-                    startActivity(CODE_SD, FastScrollerFilePickerActivity2.class);
-                }
-            }
-        });
+        binding.buttonFastscroll
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (binding.checkLightTheme.isChecked()) {
+                            startActivity(CODE_SD, FastScrollerFilePickerActivity.class);
+                        } else {
+                            startActivity(CODE_SD, FastScrollerFilePickerActivity2.class);
+                        }
+                    }
+                });
     }
 
     protected void startActivity(final int code, final Class<?> klass) {
@@ -164,18 +128,14 @@ public class NoNonsenseFilePicker extends Activity {
 
         i.setAction(Intent.ACTION_GET_CONTENT);
 
-        i.putExtra(SUPickerActivity.EXTRA_ALLOW_MULTIPLE,
-                checkAllowMultiple.isChecked());
-        i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK,
-                checkSingleClick.isChecked());
-        i.putExtra(SUPickerActivity.EXTRA_ALLOW_CREATE_DIR,
-                checkAllowCreateDir.isChecked());
-        i.putExtra(FilePickerActivity.EXTRA_ALLOW_EXISTING_FILE,
-                checkAllowExistingFile.isChecked());
+        i.putExtra(SUPickerActivity.EXTRA_ALLOW_MULTIPLE, binding.checkAllowMultiple.isChecked());
+        i.putExtra(FilePickerActivity.EXTRA_SINGLE_CLICK, binding.checkSingleClick.isChecked());
+        i.putExtra(SUPickerActivity.EXTRA_ALLOW_CREATE_DIR, binding.checkAllowCreateDir.isChecked());
+        i.putExtra(FilePickerActivity.EXTRA_ALLOW_EXISTING_FILE, binding.checkAllowExistingFile.isChecked());
 
         // What mode is selected
         final int mode;
-        switch (radioGroup.getCheckedRadioButtonId()) {
+        switch (binding.radioGroup.getCheckedRadioButtonId()) {
             case R.id.radioDir:
                 mode = AbstractFilePickerFragment.MODE_DIR;
                 break;
@@ -199,25 +159,6 @@ public class NoNonsenseFilePicker extends Activity {
         startActivityForResult(i, code);
     }
 
-    /**
-     * This is entirely for Dropbox's benefit
-     */
-    protected void onResume() {
-        super.onResume();
-
-        if (mDBApi != null && mDBApi.getSession().authenticationSuccessful()) {
-            try {
-                // Required to complete auth, sets the access token on the session
-                mDBApi.getSession().finishAuthentication();
-
-                String accessToken = mDBApi.getSession().getOAuth2AccessToken();
-                DropboxSyncHelper.saveToken(this, accessToken);
-            } catch (IllegalStateException e) {
-                Log.i("DbAuthLog", "Error authenticating", e);
-            }
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -237,42 +178,25 @@ public class NoNonsenseFilePicker extends Activity {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
-        if ((CODE_SD == requestCode || CODE_DB == requestCode || CODE_FTP == requestCode) &&
-                resultCode == Activity.RESULT_OK) {
-            if (data.getBooleanExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE,
-                    false)) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Always check the resultCode!
+        // Checking for the requestCodes is a bit redundant but good style
+        if (resultCode == Activity.RESULT_OK &&
+                (CODE_SD == requestCode || CODE_DB == requestCode || CODE_FTP == requestCode)) {
+            // Use the provided utility method to parse the result
+            List<Uri> files = Utils.getSelectedFilesFromResult(data);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    ClipData clip = data.getClipData();
-                    StringBuilder sb = new StringBuilder();
-
-                    if (clip != null) {
-                        for (int i = 0; i < clip.getItemCount(); i++) {
-                            sb.append(clip.getItemAt(i).getUri().toString());
-                            sb.append("\n");
-                        }
-                    }
-
-                    textView.setText(sb.toString());
-                } else {
-                    ArrayList<String> paths = data.getStringArrayListExtra(
-                            FilePickerActivity.EXTRA_PATHS);
-                    StringBuilder sb = new StringBuilder();
-
-                    if (paths != null) {
-                        for (String path : paths) {
-                            sb.append(path);
-                            sb.append("\n");
-                        }
-                    }
-                    textView.setText(sb.toString());
+            // Do something with your list of files here
+            StringBuilder sb = new StringBuilder();
+            for (Uri uri : files) {
+                if (sb.length() > 0) {
+                    sb.append("\n");
                 }
-            } else {
-                textView.setText(data.getData().toString());
+                sb.append(CODE_SD == requestCode ?
+                        Utils.getFileForUri(uri).toString() :
+                        uri.toString());
             }
+            binding.text.setText(sb.toString());
         }
     }
-
 }

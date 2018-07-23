@@ -497,13 +497,13 @@ public abstract class AbstractFilePickerFragment<T> extends Fragment
 
     @Override
     public void onSaveInstanceState(Bundle b) {
-        super.onSaveInstanceState(b);
         b.putString(KEY_CURRENT_PATH, mCurrentPath.toString());
         b.putBoolean(KEY_ALLOW_MULTIPLE, allowMultiple);
         b.putBoolean(KEY_ALLOW_EXISTING_FILE, allowExistingFile);
         b.putBoolean(KEY_ALLOW_DIR_CREATE, allowCreateDir);
         b.putBoolean(KEY_SINGLE_CLICK, singleClick);
         b.putInt(KEY_MODE, mode);
+        super.onSaveInstanceState(b);
     }
 
     @Override
@@ -583,6 +583,8 @@ public abstract class AbstractFilePickerFragment<T> extends Fragment
         if (mCurrentDirView != null) {
             mCurrentDirView.setText(getFullPath(mCurrentPath));
         }
+        // Stop loading now to avoid a refresh clearing the user's selections
+        getLoaderManager().destroyLoader( 0 );
     }
 
     /**
@@ -595,8 +597,6 @@ public abstract class AbstractFilePickerFragment<T> extends Fragment
     @Override
     public void onLoaderReset(final Loader<SortedList<T>> loader) {
         isLoading = false;
-        mAdapter.setList(null);
-        mFiles = null;
     }
 
     /**
