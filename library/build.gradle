@@ -5,43 +5,39 @@ apply plugin: 'com.android.library'
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-// must be applied after your artifact generating plugin (eg. java /  com.android.library)
-apply plugin: 'bintray-release'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "26.0.2"
+    compileSdkVersion verCompileSdk
+    buildToolsVersion verBuildTools
 
     lintOptions {
         abortOnError false
     }
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 24
-        versionCode gitCommitCount
-        versionName gitTag
+        minSdkVersion verMinSdk
+        targetSdkVersion verTargetSdk
+
         vectorDrawables.useSupportLibrary = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:support-v4:24.2.1'
-    compile 'com.android.support:recyclerview-v7:24.2.1'
+    implementation "com.android.support:appcompat-v7:$verSupportLib"
+    implementation "com.android.support:support-v4:$verSupportLib"
+    implementation "com.android.support:recyclerview-v7:$verSupportLib"
 
-    testCompile 'junit:junit:4.12'
-}
-
-publish {
-    groupId = 'com.nononsenseapps'
-    artifactId = 'filepicker'
-    publishVersion = gitTag
-    description = 'An extendable Android file/directory-picker you can include in your app'
-    website = 'https://github.com/spacecowboy/NoNonsense-FilePicker'
-    licences = ['MPL-2.0']
-    uploadName = 'com.nononsenseapps:filepicker'
-    bintrayUser = project.hasProperty("BINTRAY_USER")? BINTRAY_USER: "Dummy"
-    bintrayKey = project.hasProperty("BINTRAY_KEY") ? BINTRAY_KEY: "Dummy"
+    testImplementation "junit:junit:$verJUnitLib"
 }
