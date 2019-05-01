@@ -8,7 +8,7 @@ import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObjectNotFoundException;
 import android.support.test.uiautomator.UiSelector;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 

@@ -6,10 +6,10 @@
 
 package com.nononsenseapps.filepicker;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.util.SortedList;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.SortedList;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.ViewGroup;
 
 /**
